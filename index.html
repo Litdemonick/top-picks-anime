@@ -42,6 +42,7 @@
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       min-height: 100vh;
       transition: background-color 0.3s, color 0.3s;
+      overflow-x: hidden;
     }
 
     /* ── BOTÓN DÍA/NOCHE ── */
@@ -146,35 +147,46 @@
       margin: 0 auto;
     }
 
-    /* ── CARD ── */
+    /* ── CARD (Optimizada para evitar glitch en hover) ── */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 16px;
-      overflow: hidden;
       cursor: pointer;
       position: relative;
+      /* Optimizaciones clave para el borde/hover */
+      overflow: hidden;
+      transform: translateZ(0); /* Aceleración GPU */
+      -webkit-mask-image: -webkit-radial-gradient(white, black); /* Evita bleed en Safari/Chrome */
       transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), border-color 0.2s, box-shadow 0.3s;
+      will-change: transform, box-shadow, border-color;
     }
 
     .card:hover {
-      transform: translateY(-10px) scale(1.02);
+      transform: translateY(-10px) scale(1.02) translateZ(0);
       border-color: var(--accent);
       box-shadow: 0 24px 48px rgba(124,58,237,0.15);
     }
 
-    .card-img-wrap { position: relative; overflow: hidden; }
+    .card-img-wrap { 
+      position: relative; 
+      overflow: hidden; 
+    }
 
     .card-img {
       width: 100%;
-      height: 300px;
+      height: 320px; /* Un poco más alto para pósters */
       object-fit: cover;
+      object-position: center top; /* Evita cortar cabezas */
       display: block;
       background: var(--surface);
-      transition: transform 0.4s ease;
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
     }
 
-    .card:hover .card-img { transform: scale(1.06); }
+    .card:hover .card-img { 
+      transform: scale(1.08); 
+    }
 
     .card-img-wrap::after {
       content: '';
@@ -183,8 +195,10 @@
       height: 120px;
       background: linear-gradient(transparent, var(--card-bg));
       pointer-events: none;
+      z-index: 1;
     }
 
+    /* Badges */
     .rank-badge {
       position: absolute;
       top: 10px; left: 10px;
@@ -195,6 +209,7 @@
       letter-spacing: 0.5px;
       z-index: 2;
       text-transform: uppercase;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
     .rank-s { background: #dc2626; color: #fff; }
@@ -211,6 +226,7 @@
       z-index: 2;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
     .pl-cr { background: #f97316; color: #fff; }
@@ -231,7 +247,7 @@
       font-weight: 700;
       z-index: 3;
       white-space: nowrap;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
       font-variant-numeric: tabular-nums;
       opacity: 0.95;
     }
@@ -246,7 +262,7 @@
     }
 
     .card-title {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--text);
       margin-bottom: 8px;
@@ -255,7 +271,7 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      min-height: 36px;
+      min-height: 39px;
     }
 
     .card-meta {
@@ -267,17 +283,8 @@
       margin-bottom: 8px;
     }
 
-    .meta-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .meta-row svg {
-      width: 12px; height: 12px;
-      opacity: 0.5;
-      flex-shrink: 0;
-    }
+    .meta-row { display: flex; align-items: center; gap: 6px; }
+    .meta-row svg { width: 12px; height: 12px; opacity: 0.5; flex-shrink: 0; }
 
     .card-desc {
       font-size: 11px;
@@ -323,12 +330,13 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.88);
+      background: rgba(0,0,0,0.85);
       z-index: 999;
       align-items: center;
       justify-content: center;
       padding: 16px;
-      backdrop-filter: blur(5px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     .modal-overlay.open { display: flex; }
@@ -341,48 +349,86 @@
       max-width: 560px;
       max-height: 90vh;
       overflow-y: auto;
+      overflow-x: hidden;
       position: relative;
       animation: modalIn 0.3s cubic-bezier(.34,1.56,.64,1);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     }
 
     @keyframes modalIn {
-      from { transform: scale(0.82); opacity: 0; }
-      to   { transform: scale(1);    opacity: 1; }
+      from { transform: scale(0.95) translateY(20px); opacity: 0; }
+      to   { transform: scale(1) translateY(0); opacity: 1; }
     }
 
-    .modal-img {
+    /* ── NUEVO DISEÑO DE IMAGEN MODAL (Estilo Netflix/Crunchyroll) ── */
+    .modal-hero {
+      position: relative;
       width: 100%;
-      height: 280px;
-      object-fit: cover;
+      height: 320px;
+      background: #000;
+      overflow: hidden;
       border-radius: 20px 20px 0 0;
-      background: var(--surface);
-      display: block;
-      background-position: center 20%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Imagen borrosa de fondo para llenar el espacio horizontal */
+    .modal-img-blur {
+      position: absolute;
+      top: -20px; left: -20px; right: -20px; bottom: -20px;
+      width: calc(100% + 40px);
+      height: calc(100% + 40px);
+      object-fit: cover;
+      filter: blur(20px) brightness(0.6);
+      z-index: 1;
+    }
+
+    /* Imagen principal enfocada y ajustada */
+    .modal-img {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Muestra el póster completo sin cortar */
+      z-index: 2;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    }
+
+    /* Gradiente inferior para transición suave */
+    .modal-hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 80px;
+      background: linear-gradient(transparent, var(--card-bg));
+      z-index: 3;
+      pointer-events: none;
     }
 
     .modal-close {
       position: absolute;
-      top: 12px; right: 12px;
-      width: 34px; height: 34px;
+      top: 16px; right: 16px;
+      width: 36px; height: 36px;
       border-radius: 50%;
-      background: rgba(0,0,0,0.75);
-      border: 1px solid var(--border2);
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.2);
       color: #fff;
       font-size: 16px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s, color 0.2s;
+      transition: background 0.2s, transform 0.2s;
       z-index: 10;
+      backdrop-filter: blur(4px);
     }
 
-    .modal-close:hover { background: var(--accent); color: #fff; }
+    .modal-close:hover { background: var(--accent); transform: scale(1.1); border-color: transparent;}
 
-    .modal-body { padding: 22px; }
+    .modal-body { padding: 24px; position: relative; z-index: 4; margin-top: -20px; }
 
     .modal-title {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 800;
       color: var(--text);
       margin-bottom: 4px;
@@ -390,23 +436,24 @@
     }
 
     .modal-jp {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--accent-light);
-      margin-bottom: 18px;
+      margin-bottom: 20px;
       font-style: italic;
     }
 
     .modal-info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 18px;
+      gap: 12px;
+      margin-bottom: 20px;
     }
 
     .info-box {
       background: var(--surface);
       border-radius: 12px;
-      padding: 11px 14px;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
     }
 
     .info-box-label {
@@ -425,10 +472,10 @@
     }
 
     .modal-desc {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--muted);
       line-height: 1.65;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .watch-btn {
@@ -436,7 +483,7 @@
       text-align: center;
       padding: 14px;
       border-radius: 12px;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
       border: none;
@@ -446,10 +493,10 @@
       letter-spacing: 0.3px;
     }
 
-    .watch-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .watch-btn:hover { opacity: 0.9; transform: translateY(-2px); }
     .watch-btn:active { transform: scale(0.98); }
-    .btn-cr { background: #f97316; color: #fff; }
-    .btn-nf { background: #ef4444; color: #fff; }
+    .btn-cr { background: #f97316; color: #fff; box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3); }
+    .btn-nf { background: #e50914; color: #fff; box-shadow: 0 4px 15px rgba(229, 9, 20, 0.3); }
 
     .no-results {
       text-align: center;
@@ -464,15 +511,15 @@
       text-align: center;
       padding: 32px 24px;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 13px;
       border-top: 1px solid var(--border);
-      margin-top: 16px;
+      margin-top: 24px;
     }
 
     /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
   </style>
 </head>
@@ -502,7 +549,12 @@
   <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
     <div class="modal" id="modal-content">
       <button class="modal-close" onclick="closeModal()">✕</button>
-      <img class="modal-img" id="m-img" src="" alt="">
+      
+      <div class="modal-hero">
+        <img class="modal-img-blur" id="m-img-blur" src="" alt="">
+        <img class="modal-img" id="m-img" src="" alt="">
+      </div>
+
       <div class="modal-body">
         <div class="modal-title" id="m-title"></div>
         <div class="modal-jp" id="m-jp"></div>
@@ -561,7 +613,7 @@
         studio: "TMS Entertainment",
         score: 3,
         desc: "Kazuya y Chizuru continúan su complicada relación. Después de los eventos de la cuarta temporada, los sentimientos son más evidentes pero los malentendidos continúan en esta quinta entrega de la popular comedia romántica.",
-        img: "https://preview.redd.it/rent-a-girlfriend-season-5-key-visual-v0-ufhua4p2ahdg1.jpeg?auto=webp&s=ec44f5218134a615b7af394bd3e674ed1afebe53", // <-- Pon tu enlace aquí
+        img: "https://preview.redd.it/rent-a-girlfriend-season-5-key-visual-v0-ufhua4p2ahdg1.jpeg?auto=webp&s=ec44f5218134a615b7af394bd3e674ed1afebe53",
         link: "https://www.crunchyroll.com",
         nextEpisode: getNextAirDate(5, 11, 30)
       },
@@ -579,7 +631,7 @@
         studio: "Por confirmar",
         score: 4,
         desc: "¿De verdad no hay gals amables con los otakus? Seo, un otaku empedernido, descubre que las apariencias engañan cuando dos compañeras gyaru empiezan a interesarse genuinamente por sus aficiones.",
-        img: "", // <-- Pon tu enlace aquí
+        img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx176437-aP7d4m73x5B1.jpg", 
         link: "https://www.crunchyroll.com",
         nextEpisode: getNextAirDate(6, 14, 0)
       },
@@ -597,7 +649,7 @@
         studio: "Lerche",
         score: 5,
         desc: "Ayanokoji entra en la siguiente fase de su estancia en la preparatoria. Con nuevos exámenes especiales y amenazas provenientes de la White Room, el genio manipulador deberá usar cada pieza del tablero para sobrevivir al segundo año.",
-        img: "", // <-- Pon tu enlace aquí
+        img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx181745-fW4m3V5P2g7K.jpg",
         link: "https://www.crunchyroll.com",
         nextEpisode: getNextAirDate(2, 10, 30)
       },
@@ -615,7 +667,7 @@
         studio: "CloverWorks",
         score: 4,
         desc: "Gero, el heredero de un clan de asesinos usuarios de veneno, necesita casarse para continuar su linaje. Para lograrlo, contrata a Kinosaki, un estafador matrimonial, para que le enseñe a tener citas mientras aniquila a sus objetivos.",
-        img: "", // <-- Pon tu enlace aquí
+        img: "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx148061-Fw4b3K1Q2y8S.jpg",
         link: "https://www.netflix.com",
         nextEpisode: getNextAirDate(3, 9, 0)
       },
@@ -633,7 +685,7 @@
         studio: "Por confirmar",
         score: 4,
         desc: "Maki hace una inesperada amistad con Umi, la chica considerada 'la segunda más linda de la clase'. Sin embargo, para él, ella es la número uno. Un romance escolar dulce y relajado sobre amistades que evolucionan a algo más.",
-        img: "", // <-- Pon tu enlace aquí
+        img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx168925-P2q6k3v5F8D9.jpg",
         link: "https://www.crunchyroll.com",
         nextEpisode: getNextAirDate(4, 12, 0)
       },
@@ -651,7 +703,7 @@
         studio: "BUG FILMS",
         score: 5,
         desc: "Coco siempre soñó con usar magia, pero en su mundo, debes nacer siendo brujo. Tras descubrir por accidente el secreto de cómo se lanzan los hechizos, se convierte en la aprendiz del mago Qifrey en una historia visualmente deslumbrante.",
-        img: "", // <-- Pon tu enlace aquí
+        img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx147321-X3k8b4V6y9L2.jpg",
         link: "https://www.crunchyroll.com",
         nextEpisode: getNextAirDate(1, 14, 0)
       },
@@ -669,7 +721,7 @@
         studio: "White Fox",
         score: 5,
         desc: "Subaru y Emilia se adentran en un nuevo y oscuro misterio. La cuarta temporada adapta uno de los arcos más esperados de la novela ligera, llevando las habilidades y la resiliencia mental de Subaru a un límite sin precedentes.",
-        img: "", // <-- Pon tu enlace aquí
+        img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx162815-K4m3B5v7c8L9.jpg", 
         link: "https://www.crunchyroll.com",
         nextEpisode: getNextAirDate(3, 13, 0)
       },
@@ -687,7 +739,7 @@
         studio: "Toei Animation",
         score: 5,
         desc: "La tripulación del Sombrero de Paja continúa su legendario viaje por el Nuevo Mundo. Con la calidad de animación en su punto máximo histórico, las aventuras de Luffy siguen rompiendo el internet cada fin de semana.",
-        img: "", // <-- Pon tu enlace aquí
+        img: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-YCDignzjGQcU.jpg", 
         link: "https://www.crunchyroll.com",
         nextEpisode: getNextAirDate(0, 2, 0)
       },
@@ -705,7 +757,7 @@
         studio: "Por confirmar",
         score: 3,
         desc: "Una relajante historia de comedia sobre una maid británica que viaja a Japón y descubre las maravillas de la gastronomía japonesa, desde comida callejera hasta platillos tradicionales. Ideal para ver mientras comes.",
-        img: "", // <-- Pon tu enlace aquí
+        img: "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx114815-H4k3V2B6c8N1.jpg", 
         link: "https://www.netflix.com",
         nextEpisode: getNextAirDate(5, 8, 0)
       },
@@ -723,7 +775,7 @@
         studio: "Por confirmar",
         score: 4,
         desc: "Un excéntrico detective tiene un don especial: si es asesinado durante una investigación, retrocede en el tiempo con los recuerdos de su propia muerte para desenmascarar a su asesino. Misterios estilo 'whodunit' con viajes temporales.",
-        img: "", // <-- Pon tu enlace aquí
+        img: "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx145558-L3m2V4K6b8M9.jpg", 
         link: "https://www.netflix.com",
         nextEpisode: getNextAirDate(6, 10, 0)
       }
@@ -743,7 +795,7 @@
       grid.innerHTML = list.map(a => `
         <div class="card" onclick="openModal(${a.id})" tabindex="0" role="button">
           <div class="card-img-wrap">
-            <img class="card-img" src="${a.img}" alt="${a.title}" loading="lazy">
+            <img class="card-img" src="${a.img || 'https://via.placeholder.com/300x450/1a2236/64748b?text=Sin+Imagen'}" alt="${a.title}" loading="lazy">
             <span class="rank-badge rank-${a.rank.toLowerCase()}">${a.rank} Tier</span>
             <span class="platform-badge pl-${a.platform}">${a.platform === 'crunchyroll' ? 'CR' : 'NF'}</span>
             <div class="countdown-badge" data-target="${a.nextEpisode}">Calculando...</div>
@@ -782,7 +834,11 @@
       currentAnime = animes.find(a => a.id === id);
       if (!currentAnime) return;
       const a = currentAnime;
-      document.getElementById('m-img').src = a.img;
+      
+      const imgSrc = a.img || 'https://via.placeholder.com/300x450/1a2236/64748b?text=Sin+Imagen';
+      document.getElementById('m-img').src = imgSrc;
+      document.getElementById('m-img-blur').src = imgSrc; /* Asignamos al blur también */
+      
       document.getElementById('m-title').textContent = a.title;
       document.getElementById('m-jp').textContent = a.jp;
       document.getElementById('m-date').textContent = a.date;
