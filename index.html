@@ -1,187 +1,752 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watchlist Anime 2026</title>
-    <style>
-        :root {
-            --bg: #0f172a;
-            --card-bg: #1e293b;
-            --accent: #38bdf8;
-            --text: #f1f5f9;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Must-Watch Anime — Abril 2026</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
+    :root {
+      --bg: #0a0e1a;
+      --card-bg: #111827;
+      --surface: #1a2236;
+      --border: #1e2a4a;
+      --border2: #2d3e6a;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --accent: #7c3aed;
+      --accent-light: #a78bfa;
+    }
 
-        header {
-            text-align: center;
-            padding: 40px 0;
-        }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+    }
 
-        h1 {
-            font-size: 2.5rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(180deg, #0d1225 0%, var(--bg) 100%);
+      padding: 48px 24px 36px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 25px;
-        }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(124,58,237,0.15);
+      border: 1px solid rgba(124,58,237,0.4);
+      color: var(--accent-light);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
 
-        .anime-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid #334155;
-        }
+    .hero h1 {
+      font-size: clamp(26px, 5vw, 42px);
+      font-weight: 800;
+      color: #f1f5f9;
+      letter-spacing: -1px;
+      margin-bottom: 10px;
+    }
 
-        .anime-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            border-color: var(--accent);
-        }
+    .hero h1 span {
+      background: linear-gradient(90deg, #818cf8, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
-        .poster {
-            width: 100%;
-            height: 350px;
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
+    .hero p {
+      color: var(--muted);
+      font-size: 14px;
+    }
 
-        /* Simulación de portadas ya que no tengo los archivos de imagen */
-        .poster img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    /* ── FILTERS ── */
+    .filters {
+      display: flex;
+      gap: 8px;
+      padding: 24px 24px 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-        .info {
-            padding: 15px;
-        }
+    .filter-btn {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      color: #94a3b8;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.3px;
+    }
 
-        .info h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.1rem;
-            height: 50px; /* Para mantener alineación */
-            overflow: hidden;
-        }
+    .filter-btn:hover { background: rgba(124,58,237,0.2); border-color: var(--accent); color: var(--accent-light); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-        .tag {
-            display: inline-block;
-            background: var(--accent);
-            color: var(--bg);
-            padding: 3px 10px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-    </style>
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 22px;
+      padding: 22px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), border-color 0.2s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: var(--accent);
+      box-shadow: 0 24px 48px rgba(124,58,237,0.28);
+    }
+
+    .card-img-wrap { position: relative; overflow: hidden; }
+
+    .card-img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      display: block;
+      background: var(--surface);
+      transition: transform 0.4s ease;
+    }
+
+    .card:hover .card-img { transform: scale(1.06); }
+
+    .card-img-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 90px;
+      background: linear-gradient(transparent, var(--card-bg));
+      pointer-events: none;
+    }
+
+    .rank-badge {
+      position: absolute;
+      top: 10px; left: 10px;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+      z-index: 2;
+      text-transform: uppercase;
+    }
+
+    .rank-s { background: #dc2626; color: #fff; }
+    .rank-a { background: #d97706; color: #fff; }
+    .rank-b { background: #2563eb; color: #fff; }
+
+    .platform-badge {
+      position: absolute;
+      top: 10px; right: 10px;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 12px;
+      z-index: 2;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .pl-cr { background: #f97316; color: #fff; }
+    .pl-nf { background: #ef4444; color: #fff; }
+
+    .card-body { padding: 14px; }
+
+    .card-genre {
+      font-size: 11px;
+      color: var(--accent-light);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 8px;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 36px;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .meta-row svg {
+      width: 12px; height: 12px;
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+
+    .card-desc {
+      font-size: 11px;
+      color: #4b5563;
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .score-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .stars { color: #f59e0b; font-size: 12px; letter-spacing: 1px; }
+    .score-num { font-size: 12px; font-weight: 700; color: #f59e0b; margin-left: auto; }
+
+    .ep-live {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      margin-right: 2px;
+      animation: pulse 1.5s infinite;
+      vertical-align: middle;
+      position: relative;
+      top: -1px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--card-bg);
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: modalIn 0.3s cubic-bezier(.34,1.56,.64,1);
+    }
+
+    @keyframes modalIn {
+      from { transform: scale(0.82); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+
+    .modal-img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 20px 20px 0 0;
+      background: var(--surface);
+      display: block;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.75);
+      border: 1px solid var(--border2);
+      color: #94a3b8;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s;
+      z-index: 10;
+    }
+
+    .modal-close:hover { background: var(--accent); color: #fff; }
+
+    .modal-body { padding: 22px; }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #f1f5f9;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .modal-jp {
+      font-size: 12px;
+      color: var(--accent-light);
+      margin-bottom: 18px;
+      font-style: italic;
+    }
+
+    .modal-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .info-box {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 11px 14px;
+    }
+
+    .info-box-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .info-box-val {
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .modal-desc {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+
+    .watch-btn {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.1s;
+      letter-spacing: 0.3px;
+    }
+
+    .watch-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .watch-btn:active { transform: scale(0.98); }
+    .btn-cr { background: #f97316; color: #fff; }
+    .btn-nf { background: #ef4444; color: #fff; }
+
+    .no-results {
+      text-align: center;
+      padding: 80px 20px;
+      color: #334155;
+      font-size: 14px;
+      grid-column: 1 / -1;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      color: #1e2a4a;
+      font-size: 12px;
+      border-top: 1px solid #0f1729;
+      margin-top: 16px;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  </style>
 </head>
 <body>
 
-<header>
-    <h1>Must-Watch Anime 2026</h1>
-    <p>La selección definitiva para esta temporada</p>
-</header>
+  <div class="hero">
+    <div class="hero-badge">Temporada Primavera 2026</div>
+    <h1>Must-Watch <span>Anime</span> — Abril 2026</h1>
+    <p>Los mejores estrenos y continuaciones · Haz click en una card para ver info completa</p>
+  </div>
 
-<div class="container">
-    <div class="anime-card">
-        <div class="poster"><img src="https://via.placeholder.com/300x450?text=Re:Zero+S4" alt="Re:Zero"></div>
-        <div class="info">
-            <span class="tag">Top Tier</span>
-            <h3>Re:Zero kara Hajimeru Isekai Seikatsu 4th Season</h3>
+  <div class="filters">
+    <button class="filter-btn active" onclick="filter('all', this)">Todos</button>
+    <button class="filter-btn" onclick="filter('crunchyroll', this)">Crunchyroll</button>
+    <button class="filter-btn" onclick="filter('netflix', this)">Netflix</button>
+    <button class="filter-btn" onclick="filter('accion', this)">Acción</button>
+    <button class="filter-btn" onclick="filter('fantasy', this)">Fantasía</button>
+    <button class="filter-btn" onclick="filter('romance', this)">Romance</button>
+    <button class="filter-btn" onclick="filter('top', this)">S Tier</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>Anime Watchlist · Primavera 2026 · Datos verificados a Abril 2026</footer>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+    <div class="modal" id="modal-content">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <img class="modal-img" id="m-img" src="" alt="">
+      <div class="modal-body">
+        <div class="modal-title" id="m-title"></div>
+        <div class="modal-jp" id="m-jp"></div>
+        <div class="modal-info-grid">
+          <div class="info-box"><div class="info-box-label">Estreno</div><div class="info-box-val" id="m-date"></div></div>
+          <div class="info-box"><div class="info-box-label">Día / Hora</div><div class="info-box-val" id="m-day"></div></div>
+          <div class="info-box"><div class="info-box-label">Episodios</div><div class="info-box-val" id="m-eps"></div></div>
+          <div class="info-box"><div class="info-box-label">Estudio</div><div class="info-box-val" id="m-studio"></div></div>
         </div>
+        <div class="modal-desc" id="m-desc"></div>
+        <a class="watch-btn" id="m-btn" href="#" target="_blank" rel="noopener"></a>
+      </div>
     </div>
+  </div>
 
-    <div class="anime-card">
-        <div class="poster"><img src="https://via.placeholder.com/300x450?text=One+Piece" alt="One Piece"></div>
-        <div class="info">
-            <span class="tag">Legendary</span>
-            <h3>One Piece</h3>
+  <script>
+    const animes = [
+      {
+        id: 1,
+        title: "JoJo's Bizarre Adventure: Steel Ball Run",
+        jp: "ジョジョの奇妙な冒険 スティール・ボール・ラン",
+        genre: "Acción / Aventura Épica",
+        tags: ["accion", "top", "netflix"],
+        platform: "netflix",
+        rank: "S",
+        eps: "1 ep disponible (2nd Stage: otoño 2026)",
+        date: "19 mar 2026",
+        day: "Netflix Exclusivo",
+        studio: "David Production",
+        score: 5,
+        desc: "El arco más legendario de JoJo finalmente animado. Johnny Joestar, paralítico, compite en una épica carrera a caballo cruzando EE.UU. en 1890. El piloto dura 47 minutos y es una obra maestra visual. El episodio 2 llega en otoño 2026 con cour semanal. Nuevo universo, nuevo Joestar, misma energía bizarra.",
+        img: "https://i.pinimg.com/736x/4b/5e/d7/4b5ed76d7571cd1b1ad1cd72ff07e3ca.jpg",
+        link: "https://www.netflix.com/search?q=steel+ball+run+jojo"
+      },
+      {
+        id: 2,
+        title: "Re:Zero — 4ª Temporada",
+        jp: "Re:ゼロから始める異世界生活 4th Season",
+        genre: "Isekai / Suspense / Drama",
+        tags: ["fantasy", "top", "crunchyroll"],
+        platform: "crunchyroll",
+        rank: "S",
+        eps: "19 episodios confirmados",
+        date: "8 abr 2026",
+        day: "Miércoles · 22:00 JST",
+        studio: "White Fox",
+        score: 5,
+        desc: "Subaru enfrenta el arco de la Torre de las Pléyades en las dunas de Augria con Shaula como nueva antagonista. La T4 promete un giro narrativo emocional más cercano a Frieren que a la aventura tradicional. El ending es colaboración entre TK from Ling Toshite Shigure y MYTH & ROID. Solo 1 año después de la T3.",
+        img: "https://i.pinimg.com/736x/85/34/c9/8534c9fd59c82d4c00cbb7462498aee6.jpg",
+        link: "https://www.crunchyroll.com/series/GRGGPG93R/rezero-starting-life-in-another-world"
+      },
+      {
+        id: 3,
+        title: "Dorohedoro — 2ª Temporada",
+        jp: "ドロヘドロ Season 2",
+        genre: "Acción / Dark Fantasy / Gore",
+        tags: ["accion", "fantasy", "top", "crunchyroll"],
+        platform: "crunchyroll",
+        rank: "S",
+        eps: "~10 eps (finaliza 27 may 2026)",
+        date: "1 abr 2026",
+        day: "Miércoles · 7:00am PT",
+        studio: "MAPPA",
+        score: 5,
+        desc: "6 años de espera y MAPPA entrega. Caiman y Nikaido siguen desentrañando el secreto detrás de la transformación en una de las estéticas más brutales y únicas del anime. Premiere de 60 minutos (3 episodios). Disponible en Crunchyroll y Netflix (con dub inglés en Netflix).",
+        img: "https://i.pinimg.com/736x/2f/d4/09/2fd40990b50efb5c60e6ef07b63f7b17.jpg",
+        link: "https://www.crunchyroll.com/series/G6NQ5DWZ6/dorohedoro"
+      },
+      {
+        id: 4,
+        title: "Classroom of the Elite — 4ª Temporada",
+        jp: "ようこそ実力至上主義の教室へ 4th Season",
+        genre: "Psicológico / Thriller Escolar",
+        tags: ["accion", "top", "crunchyroll"],
+        platform: "crunchyroll",
+        rank: "S",
+        eps: "~24 episodios (2do año)",
+        date: "1 abr 2026",
+        day: "Martes · Crunchyroll",
+        studio: "Studio Lerche",
+        score: 5,
+        desc: "Ayanokoji entra al 2do año con exámenes inter-generacionales y alianzas peligrosas. Rivales de la White Room quieren sacarlo del colegio. Premiere de 90 minutos con 4 episodios seguidos. El maestro de la manipulación social en su arco más arriesgado.",
+        img: "https://i.pinimg.com/736x/87/90/25/879025f8e60e60c2b62a44bfde2e5a9c.jpg",
+        link: "https://www.crunchyroll.com/series/G9VHN9QQQ/classroom-of-the-elite"
+      },
+      {
+        id: 5,
+        title: "Witch Hat Atelier",
+        jp: "とんがり帽子のアトリエ",
+        genre: "Fantasía / Arte / Magia",
+        tags: ["fantasy", "crunchyroll"],
+        platform: "crunchyroll",
+        rank: "A",
+        eps: "Por confirmar",
+        date: "6 abr 2026",
+        day: "Lunes · 23:00 JST",
+        studio: "BUG FILMS",
+        score: 5,
+        desc: "Coco sueña con ser bruja en un mundo donde la magia es secreto de pocas. Al espiar al mago Qifrey descubre la verdad prohibida. Manga de culto de Kamome Shirahama con arte visualmente impresionante. Double-episode premiere con dub en inglés disponible el mismo día.",
+        img: "https://i.pinimg.com/736x/57/3f/f0/573ff098e3e68d4d3f2b77fa74e1c3b5.jpg",
+        link: "https://www.crunchyroll.com"
+      },
+      {
+        id: 6,
+        title: "One Piece — Arco de Elbaph",
+        jp: "ONE PIECE — エルバフ編",
+        genre: "Shonen / Aventura / Piratas",
+        tags: ["accion", "crunchyroll"],
+        platform: "crunchyroll",
+        rank: "A",
+        eps: "En curso (ep ~1150+)",
+        date: "5 abr 2026",
+        day: "Domingos · Crunchyroll",
+        studio: "Toei Animation",
+        score: 4,
+        desc: "La tripulación de Sombrero de Paja llega a Elbaph, la tierra de los gigantes. Uno de los arcos más esperados del manga de Eiichiro Oda. El hype está en máximos después del live-action de Netflix. Nuevo opening y ending revelados en Anime Japan 2026.",
+        img: "https://i.pinimg.com/736x/db/35/0e/db350e8a7bf1d614e8f0c34d7db2c0d9.jpg",
+        link: "https://www.crunchyroll.com/series/GRMG8ZQZR/one-piece"
+      },
+      {
+        id: 7,
+        title: "Daemons of the Shadow Realm",
+        jp: "黄泉のツガイ",
+        genre: "Acción / Fantasía Oscura",
+        tags: ["accion", "fantasy", "crunchyroll"],
+        platform: "crunchyroll",
+        rank: "A",
+        eps: "Por confirmar",
+        date: "Abril 2026",
+        day: "Por confirmar",
+        studio: "CloverWorks",
+        score: 4,
+        desc: "Nuevo manga de Hiromu Arakawa, creadora de Fullmetal Alchemist: Brotherhood. Yuru vive en una aldea feudal aislada hasta que helicópteros modernos la atacan. Fantasía oscura con contraste medieval-moderno que recuerda a Dororo y AoT. La apuesta más original de la temporada.",
+        img: "https://i.pinimg.com/736x/3c/a5/ff/3ca5ffdfdd8ca3a5e2f76c13dd9db2c2.jpg",
+        link: "https://www.crunchyroll.com"
+      },
+      {
+        id: 8,
+        title: "Dandelion",
+        jp: "ダンデライオン",
+        genre: "Comedia / Slice of Life",
+        tags: ["romance", "netflix"],
+        platform: "netflix",
+        rank: "B",
+        eps: "Por confirmar",
+        date: "16 abr 2026",
+        day: "Jueves · Netflix",
+        studio: "Por confirmar",
+        score: 4,
+        desc: "Adaptación del manga one-shot de Hideaki Sorachi, el creador de Gintama. Su debut en un género completamente diferente, lleno de humor absurdo y momentos inesperados. Una de las apuestas más curiosas de Netflix esta primavera para los fans que quieren algo distinto.",
+        img: "https://i.pinimg.com/736x/66/00/0b/66000b33dab28c5568b5fb56f53d7f25.jpg",
+        link: "https://www.netflix.com/search?q=dandelion+anime+2026"
+      },
+      {
+        id: 9,
+        title: "Liar Game",
+        jp: "ライアーゲーム",
+        genre: "Psicológico / Thriller / Estrategia",
+        tags: ["accion", "crunchyroll"],
+        platform: "crunchyroll",
+        rank: "A",
+        eps: "Por confirmar",
+        date: "Abril 2026",
+        day: "Por confirmar",
+        studio: "Madhouse",
+        score: 4,
+        desc: "Madhouse adapta el clásico manga de Shinobu Kaitani. Nao Kanzaki entra al Liar Game, un torneo donde hay que arruinar financieramente a los rivales. Mente contra mente, mentira y psicología pura. El mismo estudio que produjo Death Note está detrás de esto.",
+        img: "https://i.pinimg.com/736x/d6/bb/82/d6bb82e4c6e1551d4dc09ccf3aa5be55.jpg",
+        link: "https://www.crunchyroll.com"
+      },
+      {
+        id: 10,
+        title: "Rompiendo el Hielo (Koori no Jouheki)",
+        jp: "氷の城壁",
+        genre: "Romance / Comedia / Escolar",
+        tags: ["romance", "netflix"],
+        platform: "netflix",
+        rank: "B",
+        eps: "Por confirmar",
+        date: "2 abr 2026",
+        day: "Jueves · Netflix",
+        studio: "Studio KAI",
+        score: 4,
+        desc: "Koyuki prefiere pasar el instituto sola hasta que Minato decide derretir su muro de hielo. De la misma autora de 'Tú y yo somos polos opuestos', hit del invierno 2026. Romance más maduro de lo que aparenta, producido por Studio KAI que también hace Re:Zero.",
+        img: "https://i.pinimg.com/736x/1e/97/85/1e97852c7ef8d3d0ec48c25b5a45d5b4.jpg",
+        link: "https://www.netflix.com/search?q=ramparts+ice+anime"
+      },
+      {
+        id: 11,
+        title: "Slime — 4ª Temporada",
+        jp: "転生したらスライムだった件 4期",
+        genre: "Isekai / Fantasía / Construcción de reino",
+        tags: ["fantasy", "crunchyroll"],
+        platform: "crunchyroll",
+        rank: "B",
+        eps: "Por confirmar",
+        date: "3 abr 2026",
+        day: "Viernes · Crunchyroll",
+        studio: "8bit",
+        score: 4,
+        desc: "Rimuru y el reino de Tempest continúan su expansión política y militar después del arco de la gran guerra. El isekai de construcción de reino mejor llevado del género regresa con más alianzas, negociaciones y batallas estratégicas. Ideal para ver relajado.",
+        img: "https://i.pinimg.com/736x/da/f4/53/daf453a3d2dd2add2a6b77b30bad40d3.jpg",
+        link: "https://www.crunchyroll.com/series/slime"
+      },
+      {
+        id: 12,
+        title: "Mao",
+        jp: "MAO",
+        genre: "Sobrenatural / Misterio / Histórico",
+        tags: ["fantasy", "crunchyroll"],
+        platform: "crunchyroll",
+        rank: "B",
+        eps: "Por confirmar",
+        date: "4 abr 2026",
+        day: "Sábado · Crunchyroll",
+        studio: "Por confirmar",
+        score: 3,
+        desc: "Nueva obra de Rumiko Takahashi (Ranma ½, Inuyasha, InuYasha). Nanoka sobrevive a un accidente sobrenatural y años después descubre un portal al Japón de la era Taishō. Ahí conoce a Mao, un exorcista maldito. Juntos investigan crímenes con demonios y ayakashi entrelazando sus destinos.",
+        img: "https://i.pinimg.com/736x/a0/c2/db/a0c2dbcf24db7ddfb60f3e48c5ff3685.jpg",
+        link: "https://www.crunchyroll.com"
+      }
+    ];
+
+    let currentAnime = null;
+
+    function renderGrid(filterTag) {
+      const grid = document.getElementById('grid');
+      const list = filterTag === 'all' ? animes : animes.filter(a => a.tags.includes(filterTag));
+
+      if (!list.length) {
+        grid.innerHTML = '<div class="no-results">No hay animes con ese filtro por ahora.</div>';
+        return;
+      }
+
+      grid.innerHTML = list.map(a => `
+        <div class="card" onclick="openModal(${a.id})" tabindex="0" role="button" aria-label="Ver detalles de ${a.title}">
+          <div class="card-img-wrap">
+            <img class="card-img" src="${a.img}" alt="${a.title}"
+              onerror="this.src='https://via.placeholder.com/400x300/111827/7c3aed?text=No+Image'">
+            <span class="rank-badge rank-${a.rank.toLowerCase()}">${a.rank} Tier</span>
+            <span class="platform-badge pl-${a.platform}">${a.platform === 'crunchyroll' ? 'CR' : 'NF'}</span>
+          </div>
+          <div class="card-body">
+            <div class="card-genre">${a.genre}</div>
+            <div class="card-title">${a.title}</div>
+            <div class="card-meta">
+              <div class="meta-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                ${a.date}
+              </div>
+              <div class="meta-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span class="ep-live"></span>${a.eps}
+              </div>
+            </div>
+            <div class="card-desc">${a.desc}</div>
+            <div class="score-wrap">
+              <span class="stars">${'★'.repeat(a.score)}${'☆'.repeat(5 - a.score)}</span>
+              <span class="score-num">${a.score}.0 / 5</span>
+            </div>
+          </div>
         </div>
-    </div>
+      `).join('');
+    }
 
-    <div class="anime-card">
-        <div class="poster"><img src="https://via.placeholder.com/300x450?text=Classroom+of+the+Elite+S4" alt="COTE"></div>
-        <div class="info">
-            <span class="tag">Psychological</span>
-            <h3>Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 4th Season</h3>
-        </div>
-    </div>
+    function filter(tag, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderGrid(tag);
+    }
 
-    <div class="anime-card">
-        <div class="poster"><img src="https://via.placeholder.com/300x450?text=Witch+Hat+Atelier" alt="Tongari Boushi"></div>
-        <div class="info">
-            <span class="tag">Artistic</span>
-            <h3>Tongari Boushi no Atelier</h3>
-        </div>
-    </div>
+    function openModal(id) {
+      currentAnime = animes.find(a => a.id === id);
+      if (!currentAnime) return;
+      const a = currentAnime;
+      document.getElementById('m-img').src = a.img;
+      document.getElementById('m-img').onerror = function() {
+        this.src = 'https://via.placeholder.com/560x280/111827/7c3aed?text=' + encodeURIComponent(a.title);
+      };
+      document.getElementById('m-title').textContent = a.title;
+      document.getElementById('m-jp').textContent = a.jp;
+      document.getElementById('m-date').textContent = a.date;
+      document.getElementById('m-day').textContent = a.day;
+      document.getElementById('m-eps').textContent = a.eps;
+      document.getElementById('m-studio').textContent = a.studio;
+      document.getElementById('m-desc').textContent = a.desc;
+      const btn = document.getElementById('m-btn');
+      btn.textContent = a.platform === 'crunchyroll' ? '▶ Ver en Crunchyroll' : '▶ Ver en Netflix';
+      btn.className = 'watch-btn ' + (a.platform === 'crunchyroll' ? 'btn-cr' : 'btn-nf');
+      btn.href = a.link;
+      document.getElementById('modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
 
-    <div class="anime-card">
-        <div class="poster"><img src="https://via.placeholder.com/300x450?text=Marriagetoxin" alt="Marriagetoxin"></div>
-        <div class="info">
-            <span class="tag">Action/Romance</span>
-            <h3>Marriagetoxin</h3>
-        </div>
-    </div>
+    function closeModal() {
+      document.getElementById('modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
 
-    <div class="anime-card">
-        <div class="poster"><img src="https://via.placeholder.com/300x450?text=Rent-a-Girlfriend+S5" alt="Kanojo Okarishimasu"></div>
-        <div class="info">
-            <span class="tag">Rom-Com</span>
-            <h3>Rent-a-Girlfriend Season 5</h3>
-        </div>
-    </div>
+    function closeModalOutside(e) {
+      if (e.target === document.getElementById('modal')) closeModal();
+    }
 
-    <div class="anime-card">
-        <div class="poster"><img src="https://via.placeholder.com/300x450?text=Otaku+ni+Yasashii+Gal" alt="Otaku Gal"></div>
-        <div class="info">
-            <span class="tag">Comedy</span>
-            <h3>Otaku ni Yasashii Gal wa Inai!?</h3>
-        </div>
-    </div>
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
 
-    <div class="anime-card">
-        <div class="poster"><img src="https://via.placeholder.com/300x450?text=2nd+Most+Beautiful+Girl" alt="Class de 2-banme"></div>
-        <div class="info">
-            <span class="tag">School Life</span>
-            <h3>Class de 2-banme ni Kawaii Onnanoko to Tomodachi ni Natta</h3>
-        </div>
-    </div>
-
-    <div class="anime-card">
-        <div class="poster"><img src="https://via.placeholder.com/300x450?text=Maid-san+wa+Taberu+dake" alt="Maid-san"></div>
-        <div class="info">
-            <span class="tag">Slice of Life</span>
-            <h3>Maid-san wa Taberu dake</h3>
-        </div>
-    </div>
-
-    <div class="anime-card">
-        <div class="poster"><img src="https://via.placeholder.com/300x450?text=Detective+Sama" alt="Mata Korosarete"></div>
-        <div class="info">
-            <span class="tag">Mystery</span>
-            <h3>Mata Korosarete Shimatta no desu ne, Tantei-sama</h3>
-        </div>
-    </div>
-
-</div>
-
+    renderGrid('all');
+  </script>
 </body>
 </html>
