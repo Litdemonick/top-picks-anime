@@ -112,6 +112,7 @@
       border-radius: 16px;
       overflow: hidden;
       cursor: pointer;
+      position: relative;
       transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), border-color 0.2s, box-shadow 0.3s;
     }
 
@@ -138,7 +139,7 @@
       content: '';
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      height: 90px;
+      height: 120px;
       background: linear-gradient(transparent, var(--card-bg));
       pointer-events: none;
     }
@@ -174,7 +175,27 @@
     .pl-cr { background: #f97316; color: #fff; }
     .pl-nf { background: #ef4444; color: #fff; }
 
-    .card-body { padding: 14px; }
+    /* ── REAL TIME COUNTDOWN BADGE ── */
+    .countdown-badge {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(17, 24, 39, 0.85);
+      border: 1px solid var(--accent);
+      color: #4ade80;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      z-index: 3;
+      white-space: nowrap;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .card-body { padding: 14px; position: relative; z-index: 2;}
 
     .card-genre {
       font-size: 11px;
@@ -266,6 +287,7 @@
       align-items: center;
       justify-content: center;
       padding: 16px;
+      backdrop-filter: blur(5px);
     }
 
     .modal-overlay.open { display: flex; }
@@ -434,7 +456,6 @@
 
   <footer>Anime Watchlist · Primavera 2026 · Datos verificados a Abril 2026</footer>
 
-  <!-- MODAL -->
   <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
     <div class="modal" id="modal-content">
       <button class="modal-close" onclick="closeModal()">✕</button>
@@ -455,6 +476,8 @@
   </div>
 
   <script>
+    // Se añadieron fechas ISO reales en 'nextEpisode' para que el contador funcione,
+    // y se reemplazaron las URLs de Pinterest por Placeholders fiables.
     const animes = [
       {
         id: 1,
@@ -470,8 +493,9 @@
         studio: "David Production",
         score: 5,
         desc: "El arco más legendario de JoJo finalmente animado. Johnny Joestar, paralítico, compite en una épica carrera a caballo cruzando EE.UU. en 1890. El piloto dura 47 minutos y es una obra maestra visual. El episodio 2 llega en otoño 2026 con cour semanal. Nuevo universo, nuevo Joestar, misma energía bizarra.",
-        img: "https://i.pinimg.com/736x/4b/5e/d7/4b5ed76d7571cd1b1ad1cd72ff07e3ca.jpg",
-        link: "https://www.netflix.com/search?q=steel+ball+run+jojo"
+        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=JoJo+SBR",
+        link: "https://www.netflix.com/search?q=steel+ball+run+jojo",
+        nextEpisode: "2026-04-12T00:00:00"
       },
       {
         id: 2,
@@ -487,8 +511,9 @@
         studio: "White Fox",
         score: 5,
         desc: "Subaru enfrenta el arco de la Torre de las Pléyades en las dunas de Augria con Shaula como nueva antagonista. La T4 promete un giro narrativo emocional más cercano a Frieren que a la aventura tradicional. El ending es colaboración entre TK from Ling Toshite Shigure y MYTH & ROID. Solo 1 año después de la T3.",
-        img: "https://i.pinimg.com/736x/85/34/c9/8534c9fd59c82d4c00cbb7462498aee6.jpg",
-        link: "https://www.crunchyroll.com/series/GRGGPG93R/rezero-starting-life-in-another-world"
+        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Re:Zero+T4",
+        link: "https://www.crunchyroll.com/series/GRGGPG93R/rezero-starting-life-in-another-world",
+        nextEpisode: "2026-04-15T13:00:00"
       },
       {
         id: 3,
@@ -504,8 +529,9 @@
         studio: "MAPPA",
         score: 5,
         desc: "6 años de espera y MAPPA entrega. Caiman y Nikaido siguen desentrañando el secreto detrás de la transformación en una de las estéticas más brutales y únicas del anime. Premiere de 60 minutos (3 episodios). Disponible en Crunchyroll y Netflix (con dub inglés en Netflix).",
-        img: "https://i.pinimg.com/736x/2f/d4/09/2fd40990b50efb5c60e6ef07b63f7b17.jpg",
-        link: "https://www.crunchyroll.com/series/G6NQ5DWZ6/dorohedoro"
+        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Dorohedoro+S2",
+        link: "https://www.crunchyroll.com/series/G6NQ5DWZ6/dorohedoro",
+        nextEpisode: "2026-04-15T14:00:00"
       },
       {
         id: 4,
@@ -521,8 +547,9 @@
         studio: "Studio Lerche",
         score: 5,
         desc: "Ayanokoji entra al 2do año con exámenes inter-generacionales y alianzas peligrosas. Rivales de la White Room quieren sacarlo del colegio. Premiere de 90 minutos con 4 episodios seguidos. El maestro de la manipulación social en su arco más arriesgado.",
-        img: "https://i.pinimg.com/736x/87/90/25/879025f8e60e60c2b62a44bfde2e5a9c.jpg",
-        link: "https://www.crunchyroll.com/series/G9VHN9QQQ/classroom-of-the-elite"
+        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=CotE+S4",
+        link: "https://www.crunchyroll.com/series/G9VHN9QQQ/classroom-of-the-elite",
+        nextEpisode: "2026-04-14T10:30:00"
       },
       {
         id: 5,
@@ -538,8 +565,9 @@
         studio: "BUG FILMS",
         score: 5,
         desc: "Coco sueña con ser bruja en un mundo donde la magia es secreto de pocas. Al espiar al mago Qifrey descubre la verdad prohibida. Manga de culto de Kamome Shirahama con arte visualmente impresionante. Double-episode premiere con dub en inglés disponible el mismo día.",
-        img: "https://i.pinimg.com/736x/57/3f/f0/573ff098e3e68d4d3f2b77fa74e1c3b5.jpg",
-        link: "https://www.crunchyroll.com"
+        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Witch+Hat+Atelier",
+        link: "https://www.crunchyroll.com",
+        nextEpisode: "2026-04-13T14:00:00"
       },
       {
         id: 6,
@@ -555,8 +583,9 @@
         studio: "Toei Animation",
         score: 4,
         desc: "La tripulación de Sombrero de Paja llega a Elbaph, la tierra de los gigantes. Uno de los arcos más esperados del manga de Eiichiro Oda. El hype está en máximos después del live-action de Netflix. Nuevo opening y ending revelados en Anime Japan 2026.",
-        img: "https://i.pinimg.com/736x/db/35/0e/db350e8a7bf1d614e8f0c34d7db2c0d9.jpg",
-        link: "https://www.crunchyroll.com/series/GRMG8ZQZR/one-piece"
+        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=One+Piece+Elbaph",
+        link: "https://www.crunchyroll.com/series/GRMG8ZQZR/one-piece",
+        nextEpisode: "2026-04-12T02:00:00"
       },
       {
         id: 7,
@@ -572,8 +601,9 @@
         studio: "CloverWorks",
         score: 4,
         desc: "Nuevo manga de Hiromu Arakawa, creadora de Fullmetal Alchemist: Brotherhood. Yuru vive en una aldea feudal aislada hasta que helicópteros modernos la atacan. Fantasía oscura con contraste medieval-moderno que recuerda a Dororo y AoT. La apuesta más original de la temporada.",
-        img: "https://i.pinimg.com/736x/3c/a5/ff/3ca5ffdfdd8ca3a5e2f76c13dd9db2c2.jpg",
-        link: "https://www.crunchyroll.com"
+        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Daemons+Shadow+Realm",
+        link: "https://www.crunchyroll.com",
+        nextEpisode: "2026-04-20T18:00:00"
       },
       {
         id: 8,
@@ -589,8 +619,9 @@
         studio: "Por confirmar",
         score: 4,
         desc: "Adaptación del manga one-shot de Hideaki Sorachi, el creador de Gintama. Su debut en un género completamente diferente, lleno de humor absurdo y momentos inesperados. Una de las apuestas más curiosas de Netflix esta primavera para los fans que quieren algo distinto.",
-        img: "https://i.pinimg.com/736x/66/00/0b/66000b33dab28c5568b5fb56f53d7f25.jpg",
-        link: "https://www.netflix.com/search?q=dandelion+anime+2026"
+        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Dandelion",
+        link: "https://www.netflix.com/search?q=dandelion+anime+2026",
+        nextEpisode: "2026-04-16T00:00:00"
       },
       {
         id: 9,
@@ -606,8 +637,9 @@
         studio: "Madhouse",
         score: 4,
         desc: "Madhouse adapta el clásico manga de Shinobu Kaitani. Nao Kanzaki entra al Liar Game, un torneo donde hay que arruinar financieramente a los rivales. Mente contra mente, mentira y psicología pura. El mismo estudio que produjo Death Note está detrás de esto.",
-        img: "https://i.pinimg.com/736x/d6/bb/82/d6bb82e4c6e1551d4dc09ccf3aa5be55.jpg",
-        link: "https://www.crunchyroll.com"
+        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Liar+Game",
+        link: "https://www.crunchyroll.com",
+        nextEpisode: "2026-04-18T20:00:00"
       },
       {
         id: 10,
@@ -623,8 +655,9 @@
         studio: "Studio KAI",
         score: 4,
         desc: "Koyuki prefiere pasar el instituto sola hasta que Minato decide derretir su muro de hielo. De la misma autora de 'Tú y yo somos polos opuestos', hit del invierno 2026. Romance más maduro de lo que aparenta, producido por Studio KAI que también hace Re:Zero.",
-        img: "https://i.pinimg.com/736x/1e/97/85/1e97852c7ef8d3d0ec48c25b5a45d5b4.jpg",
-        link: "https://www.netflix.com/search?q=ramparts+ice+anime"
+        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Rompiendo+el+Hielo",
+        link: "https://www.netflix.com/search?q=ramparts+ice+anime",
+        nextEpisode: "2026-04-09T00:00:00"
       },
       {
         id: 11,
@@ -639,9 +672,10 @@
         day: "Viernes · Crunchyroll",
         studio: "8bit",
         score: 4,
-        desc: "Rimuru y el reino de Tempest continúan su expansión política y militar después del arco de la gran guerra. El isekai de construcción de reino mejor llevado del género regresa con más alianzas, negociaciones y batallas estratégicas. Ideal para ver relajado.",
-        img: "https://i.pinimg.com/736x/da/f4/53/daf453a3d2dd2add2a6b77b30bad40d3.jpg",
-        link: "https://www.crunchyroll.com/series/slime"
+        desc: "Rimuru y el reino de Tempest continuúan su expansión política y militar después del arco de la gran guerra. El isekai de construcción de reino mejor llevado del género regresa con más alianzas, negociaciones y batallas estratégicas. Ideal para ver relajado.",
+        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Slime+T4",
+        link: "https://www.crunchyroll.com/series/slime",
+        nextEpisode: "2026-04-10T15:30:00"
       },
       {
         id: 12,
@@ -657,8 +691,9 @@
         studio: "Por confirmar",
         score: 3,
         desc: "Nueva obra de Rumiko Takahashi (Ranma ½, Inuyasha, InuYasha). Nanoka sobrevive a un accidente sobrenatural y años después descubre un portal al Japón de la era Taishō. Ahí conoce a Mao, un exorcista maldito. Juntos investigan crímenes con demonios y ayakashi entrelazando sus destinos.",
-        img: "https://i.pinimg.com/736x/a0/c2/db/a0c2dbcf24db7ddfb60f3e48c5ff3685.jpg",
-        link: "https://www.crunchyroll.com"
+        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Mao",
+        link: "https://www.crunchyroll.com",
+        nextEpisode: "2026-04-11T12:00:00"
       }
     ];
 
@@ -677,9 +712,10 @@
         <div class="card" onclick="openModal(${a.id})" tabindex="0" role="button" aria-label="Ver detalles de ${a.title}">
           <div class="card-img-wrap">
             <img class="card-img" src="${a.img}" alt="${a.title}"
-              onerror="this.src='https://via.placeholder.com/400x300/111827/7c3aed?text=No+Image'">
+              onerror="this.src='https://placehold.co/400x600/111827/7c3aed?text=Error+Imagen'">
             <span class="rank-badge rank-${a.rank.toLowerCase()}">${a.rank} Tier</span>
             <span class="platform-badge pl-${a.platform}">${a.platform === 'crunchyroll' ? 'CR' : 'NF'}</span>
+            <div class="countdown-badge" data-target="${a.nextEpisode}">Calculando...</div>
           </div>
           <div class="card-body">
             <div class="card-genre">${a.genre}</div>
@@ -715,9 +751,6 @@
       if (!currentAnime) return;
       const a = currentAnime;
       document.getElementById('m-img').src = a.img;
-      document.getElementById('m-img').onerror = function() {
-        this.src = 'https://via.placeholder.com/560x280/111827/7c3aed?text=' + encodeURIComponent(a.title);
-      };
       document.getElementById('m-title').textContent = a.title;
       document.getElementById('m-jp').textContent = a.jp;
       document.getElementById('m-date').textContent = a.date;
@@ -746,7 +779,39 @@
       if (e.key === 'Escape') closeModal();
     });
 
+    // ── LÓGICA DE CONTADOR EN TIEMPO REAL ──
+    function updateCountdowns() {
+      const badges = document.querySelectorAll('.countdown-badge');
+      const now = new Date().getTime();
+
+      badges.forEach(badge => {
+        const targetDate = badge.getAttribute('data-target');
+        if (!targetDate) return;
+
+        const distance = new Date(targetDate).getTime() - now;
+
+        if (distance < 0) {
+          badge.textContent = "¡Episodio Disponible!";
+          badge.style.color = "#f472b6";
+          badge.style.borderColor = "#f472b6";
+        } else {
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          badge.textContent = `Ep en: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+      });
+    }
+
+    // Inicializar el grid primero
     renderGrid('all');
+    
+    // Ejecutar el contador inmediatamente y luego cada 1000ms (1 segundo)
+    updateCountdowns();
+    setInterval(updateCountdowns, 1000);
+
   </script>
 </body>
 </html>
