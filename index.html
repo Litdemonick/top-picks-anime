@@ -17,6 +17,23 @@
       --muted: #64748b;
       --accent: #7c3aed;
       --accent-light: #a78bfa;
+      --hero-top: #0d1225;
+      --countdown-text: #4ade80;
+    }
+
+    /* ── VARIABLES MODO DÍA ── */
+    body.light-mode {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --surface: #f1f5f9;
+      --border: #e2e8f0;
+      --border2: #cbd5e1;
+      --text: #0f172a;
+      --muted: #475569;
+      --accent: #6d28d9;
+      --accent-light: #8b5cf6;
+      --hero-top: #e2e8f0;
+      --countdown-text: #16a34a;
     }
 
     body {
@@ -24,14 +41,38 @@
       color: var(--text);
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       min-height: 100vh;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* ── BOTÓN DÍA/NOCHE ── */
+    .theme-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border2);
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      transition: all 0.2s;
+      z-index: 100;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
     }
 
     /* ── HERO ── */
     .hero {
-      background: linear-gradient(180deg, #0d1225 0%, var(--bg) 100%);
+      background: linear-gradient(180deg, var(--hero-top) 0%, var(--bg) 100%);
       padding: 48px 24px 36px;
       text-align: center;
       border-bottom: 1px solid var(--border);
+      position: relative;
     }
 
     .hero-badge {
@@ -51,7 +92,7 @@
     .hero h1 {
       font-size: clamp(26px, 5vw, 42px);
       font-weight: 800;
-      color: #f1f5f9;
+      color: var(--text);
       letter-spacing: -1px;
       margin-bottom: 10px;
     }
@@ -82,7 +123,7 @@
     .filter-btn {
       background: var(--surface);
       border: 1px solid var(--border2);
-      color: #94a3b8;
+      color: var(--muted);
       padding: 7px 16px;
       border-radius: 20px;
       font-size: 12px;
@@ -92,7 +133,7 @@
       letter-spacing: 0.3px;
     }
 
-    .filter-btn:hover { background: rgba(124,58,237,0.2); border-color: var(--accent); color: var(--accent-light); }
+    .filter-btn:hover { background: rgba(124,58,237,0.2); border-color: var(--accent); color: var(--accent); }
     .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
     /* ── GRID ── */
@@ -119,7 +160,7 @@
     .card:hover {
       transform: translateY(-10px) scale(1.02);
       border-color: var(--accent);
-      box-shadow: 0 24px 48px rgba(124,58,237,0.28);
+      box-shadow: 0 24px 48px rgba(124,58,237,0.15);
     }
 
     .card-img-wrap { position: relative; overflow: hidden; }
@@ -181,18 +222,18 @@
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(17, 24, 39, 0.85);
+      background: var(--card-bg);
       border: 1px solid var(--accent);
-      color: #4ade80;
+      color: var(--countdown-text);
       padding: 6px 12px;
       border-radius: 8px;
       font-size: 11px;
       font-weight: 700;
       z-index: 3;
       white-space: nowrap;
-      backdrop-filter: blur(4px);
-      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       font-variant-numeric: tabular-nums;
+      opacity: 0.95;
     }
 
     .card-body { padding: 14px; position: relative; z-index: 2;}
@@ -207,7 +248,7 @@
     .card-title {
       font-size: 13px;
       font-weight: 700;
-      color: #f1f5f9;
+      color: var(--text);
       margin-bottom: 8px;
       line-height: 1.4;
       display: -webkit-box;
@@ -240,7 +281,7 @@
 
     .card-desc {
       font-size: 11px;
-      color: #4b5563;
+      color: var(--muted);
       line-height: 1.55;
       display: -webkit-box;
       -webkit-line-clamp: 3;
@@ -326,7 +367,7 @@
       border-radius: 50%;
       background: rgba(0,0,0,0.75);
       border: 1px solid var(--border2);
-      color: #94a3b8;
+      color: #fff;
       font-size: 16px;
       cursor: pointer;
       display: flex;
@@ -343,7 +384,7 @@
     .modal-title {
       font-size: 20px;
       font-weight: 800;
-      color: #f1f5f9;
+      color: var(--text);
       margin-bottom: 4px;
       line-height: 1.3;
     }
@@ -385,7 +426,7 @@
 
     .modal-desc {
       font-size: 13px;
-      color: #94a3b8;
+      color: var(--muted);
       line-height: 1.65;
       margin-bottom: 20px;
     }
@@ -413,7 +454,7 @@
     .no-results {
       text-align: center;
       padding: 80px 20px;
-      color: #334155;
+      color: var(--muted);
       font-size: 14px;
       grid-column: 1 / -1;
     }
@@ -422,9 +463,9 @@
     footer {
       text-align: center;
       padding: 32px 24px;
-      color: #1e2a4a;
+      color: var(--muted);
       font-size: 12px;
-      border-top: 1px solid #0f1729;
+      border-top: 1px solid var(--border);
       margin-top: 16px;
     }
 
@@ -438,6 +479,7 @@
 <body>
 
   <div class="hero">
+    <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()">☀️ Día</button>
     <div class="hero-badge">Actualizado · Primavera 2026</div>
     <h1>Must-Watch <span>Anime</span></h1>
     <p>Los estrenos que pediste con cuenta regresiva en tiempo real</p>
@@ -477,15 +519,25 @@
   </div>
 
   <script>
+    // ── LÓGICA MODO DÍA/NOCHE ──
+    function toggleTheme() {
+      const body = document.body;
+      const btn = document.getElementById('theme-toggle');
+      body.classList.toggle('light-mode');
+      
+      if (body.classList.contains('light-mode')) {
+        btn.textContent = '🌙 Noche';
+      } else {
+        btn.textContent = '☀️ Día';
+      }
+    }
+
     // ── GENERADOR DINÁMICO DE FECHAS DE EMISIÓN ──
-    // Asegura que sin importar qué día abras la página, el contador siempre busque el próximo episodio
-    // 0: Domingo, 1: Lunes, 2: Martes, 3: Miércoles, 4: Jueves, 5: Viernes, 6: Sábado
     function getNextAirDate(dayOfWeek, hour, minute = 0) {
       const now = new Date();
       let nextDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0);
       const daysUntil = (dayOfWeek - now.getDay() + 7) % 7;
       
-      // Si hoy es el día, pero la hora ya pasó, pasamos a la próxima semana
       if (daysUntil === 0 && now.getTime() > nextDate.getTime()) {
         nextDate.setDate(nextDate.getDate() + 7);
       } else {
@@ -509,9 +561,9 @@
         studio: "TMS Entertainment",
         score: 3,
         desc: "Kazuya y Chizuru continúan su complicada relación. Después de los eventos de la cuarta temporada, los sentimientos son más evidentes pero los malentendidos continúan en esta quinta entrega de la popular comedia romántica.",
-        img: "https://image.pollinations.ai/prompt/anime%20poster%20Rent%20a%20Girlfriend%20Chizuru%20anime%20style?width=400&height=600&nologo=true",
+        img: "https://preview.redd.it/rent-a-girlfriend-season-5-key-visual-v0-ufhua4p2ahdg1.jpeg?auto=webp&s=ec44f5218134a615b7af394bd3e674ed1afebe53", // <-- Pon tu enlace aquí
         link: "https://www.crunchyroll.com",
-        nextEpisode: getNextAirDate(5, 11, 30) // Viernes a las 11:30
+        nextEpisode: getNextAirDate(5, 11, 30)
       },
       {
         id: 2,
@@ -527,9 +579,9 @@
         studio: "Por confirmar",
         score: 4,
         desc: "¿De verdad no hay gals amables con los otakus? Seo, un otaku empedernido, descubre que las apariencias engañan cuando dos compañeras gyaru empiezan a interesarse genuinamente por sus aficiones.",
-        img: "https://image.pollinations.ai/prompt/anime%20poster%20Otaku%20friendly%20Gyaru%20school%20anime%20style?width=400&height=600&nologo=true",
+        img: "", // <-- Pon tu enlace aquí
         link: "https://www.crunchyroll.com",
-        nextEpisode: getNextAirDate(6, 14, 0) // Sábado a las 14:00
+        nextEpisode: getNextAirDate(6, 14, 0)
       },
       {
         id: 3,
@@ -545,9 +597,9 @@
         studio: "Lerche",
         score: 5,
         desc: "Ayanokoji entra en la siguiente fase de su estancia en la preparatoria. Con nuevos exámenes especiales y amenazas provenientes de la White Room, el genio manipulador deberá usar cada pieza del tablero para sobrevivir al segundo año.",
-        img: "https://image.pollinations.ai/prompt/anime%20poster%20Classroom%20of%20the%20Elite%20Ayanokoji%20dark%20anime%20style?width=400&height=600&nologo=true",
+        img: "", // <-- Pon tu enlace aquí
         link: "https://www.crunchyroll.com",
-        nextEpisode: getNextAirDate(2, 10, 30) // Martes a las 10:30
+        nextEpisode: getNextAirDate(2, 10, 30)
       },
       {
         id: 4,
@@ -563,9 +615,9 @@
         studio: "CloverWorks",
         score: 4,
         desc: "Gero, el heredero de un clan de asesinos usuarios de veneno, necesita casarse para continuar su linaje. Para lograrlo, contrata a Kinosaki, un estafador matrimonial, para que le enseñe a tener citas mientras aniquila a sus objetivos.",
-        img: "https://image.pollinations.ai/prompt/anime%20poster%20Marriagetoxin%20assassin%20poison%20action%20anime?width=400&height=600&nologo=true",
+        img: "", // <-- Pon tu enlace aquí
         link: "https://www.netflix.com",
-        nextEpisode: getNextAirDate(3, 9, 0) // Miércoles a las 09:00
+        nextEpisode: getNextAirDate(3, 9, 0)
       },
       {
         id: 5,
@@ -581,9 +633,9 @@
         studio: "Por confirmar",
         score: 4,
         desc: "Maki hace una inesperada amistad con Umi, la chica considerada 'la segunda más linda de la clase'. Sin embargo, para él, ella es la número uno. Un romance escolar dulce y relajado sobre amistades que evolucionan a algo más.",
-        img: "https://image.pollinations.ai/prompt/anime%20poster%20second%20cutest%20girl%20in%20class%20romance%20anime?width=400&height=600&nologo=true",
+        img: "", // <-- Pon tu enlace aquí
         link: "https://www.crunchyroll.com",
-        nextEpisode: getNextAirDate(4, 12, 0) // Jueves a las 12:00
+        nextEpisode: getNextAirDate(4, 12, 0)
       },
       {
         id: 6,
@@ -599,9 +651,9 @@
         studio: "BUG FILMS",
         score: 5,
         desc: "Coco siempre soñó con usar magia, pero en su mundo, debes nacer siendo brujo. Tras descubrir por accidente el secreto de cómo se lanzan los hechizos, se convierte en la aprendiz del mago Qifrey en una historia visualmente deslumbrante.",
-        img: "https://image.pollinations.ai/prompt/anime%20poster%20Witch%20Hat%20Atelier%20magic%20fantasy%20beautiful?width=400&height=600&nologo=true",
+        img: "", // <-- Pon tu enlace aquí
         link: "https://www.crunchyroll.com",
-        nextEpisode: getNextAirDate(1, 14, 0) // Lunes a las 14:00
+        nextEpisode: getNextAirDate(1, 14, 0)
       },
       {
         id: 7,
@@ -617,9 +669,9 @@
         studio: "White Fox",
         score: 5,
         desc: "Subaru y Emilia se adentran en un nuevo y oscuro misterio. La cuarta temporada adapta uno de los arcos más esperados de la novela ligera, llevando las habilidades y la resiliencia mental de Subaru a un límite sin precedentes.",
-        img: "https://image.pollinations.ai/prompt/anime%20poster%20Re%20Zero%20Subaru%20Emilia%20dark%20fantasy%20anime?width=400&height=600&nologo=true",
+        img: "", // <-- Pon tu enlace aquí
         link: "https://www.crunchyroll.com",
-        nextEpisode: getNextAirDate(3, 13, 0) // Miércoles a las 13:00
+        nextEpisode: getNextAirDate(3, 13, 0)
       },
       {
         id: 8,
@@ -635,9 +687,9 @@
         studio: "Toei Animation",
         score: 5,
         desc: "La tripulación del Sombrero de Paja continúa su legendario viaje por el Nuevo Mundo. Con la calidad de animación en su punto máximo histórico, las aventuras de Luffy siguen rompiendo el internet cada fin de semana.",
-        img: "https://image.pollinations.ai/prompt/anime%20poster%20One%20Piece%20Luffy%20epic%20shonen%20anime?width=400&height=600&nologo=true",
+        img: "", // <-- Pon tu enlace aquí
         link: "https://www.crunchyroll.com",
-        nextEpisode: getNextAirDate(0, 2, 0) // Domingos a las 02:00
+        nextEpisode: getNextAirDate(0, 2, 0)
       },
       {
         id: 9,
@@ -653,9 +705,9 @@
         studio: "Por confirmar",
         score: 3,
         desc: "Una relajante historia de comedia sobre una maid británica que viaja a Japón y descubre las maravillas de la gastronomía japonesa, desde comida callejera hasta platillos tradicionales. Ideal para ver mientras comes.",
-        img: "https://image.pollinations.ai/prompt/anime%20poster%20maid%20eating%20japanese%20food%20cute%20anime?width=400&height=600&nologo=true",
+        img: "", // <-- Pon tu enlace aquí
         link: "https://www.netflix.com",
-        nextEpisode: getNextAirDate(5, 8, 0) // Viernes a las 08:00
+        nextEpisode: getNextAirDate(5, 8, 0)
       },
       {
         id: 10,
@@ -671,9 +723,9 @@
         studio: "Por confirmar",
         score: 4,
         desc: "Un excéntrico detective tiene un don especial: si es asesinado durante una investigación, retrocede en el tiempo con los recuerdos de su propia muerte para desenmascarar a su asesino. Misterios estilo 'whodunit' con viajes temporales.",
-        img: "https://image.pollinations.ai/prompt/anime%20poster%20detective%20murder%20mystery%20time%20loop%20anime?width=400&height=600&nologo=true",
+        img: "", // <-- Pon tu enlace aquí
         link: "https://www.netflix.com",
-        nextEpisode: getNextAirDate(6, 10, 0) // Sábado a las 10:00
+        nextEpisode: getNextAirDate(6, 10, 0)
       }
     ];
 
@@ -723,7 +775,7 @@
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderGrid(tag);
-      updateCountdowns(); // Actualizar inmediatamente al filtrar
+      updateCountdowns(); 
     }
 
     function openModal(id) {
@@ -772,15 +824,13 @@
 
         const distance = new Date(targetDate).getTime() - now;
 
-        // Si el tiempo es menor a 0 (está saliendo justo ahora, dura 30 minutos)
         if (distance < 0 && distance > -1800000) {
           badge.textContent = "¡Ep. en emisión!";
           badge.style.color = "#f472b6";
           badge.style.borderColor = "#f472b6";
         } 
-        // Si ya pasó, la función `getNextAirDate` calculará la de la próxima semana automáticamente al recargar
         else {
-          badge.style.color = "#4ade80";
+          badge.style.color = "var(--countdown-text)";
           badge.style.borderColor = "var(--accent)";
           
           const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -794,7 +844,6 @@
     }
 
     // Iniciar
-    
     renderGrid('all');
     updateCountdowns();
     setInterval(updateCountdowns, 1000);
