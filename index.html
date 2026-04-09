@@ -316,6 +316,7 @@
       border-radius: 20px 20px 0 0;
       background: var(--surface);
       display: block;
+      background-position: center 20%;
     }
 
     .modal-close {
@@ -437,9 +438,9 @@
 <body>
 
   <div class="hero">
-    <div class="hero-badge">Temporada Primavera 2026</div>
-    <h1>Must-Watch <span>Anime</span> — Abril 2026</h1>
-    <p>Los mejores estrenos y continuaciones · Haz click en una card para ver info completa</p>
+    <div class="hero-badge">Actualizado · Primavera 2026</div>
+    <h1>Must-Watch <span>Anime</span></h1>
+    <p>Los estrenos que pediste con cuenta regresiva en tiempo real</p>
   </div>
 
   <div class="filters">
@@ -454,7 +455,7 @@
 
   <div class="grid" id="grid"></div>
 
-  <footer>Anime Watchlist · Primavera 2026 · Datos verificados a Abril 2026</footer>
+  <footer>Anime Watchlist · Primavera 2026 · Datos Dinámicos</footer>
 
   <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
     <div class="modal" id="modal-content">
@@ -464,8 +465,8 @@
         <div class="modal-title" id="m-title"></div>
         <div class="modal-jp" id="m-jp"></div>
         <div class="modal-info-grid">
-          <div class="info-box"><div class="info-box-label">Estreno</div><div class="info-box-val" id="m-date"></div></div>
-          <div class="info-box"><div class="info-box-label">Día / Hora</div><div class="info-box-val" id="m-day"></div></div>
+          <div class="info-box"><div class="info-box-label">Día Emisión</div><div class="info-box-val" id="m-date"></div></div>
+          <div class="info-box"><div class="info-box-label">Plataforma</div><div class="info-box-val" id="m-day"></div></div>
           <div class="info-box"><div class="info-box-label">Episodios</div><div class="info-box-val" id="m-eps"></div></div>
           <div class="info-box"><div class="info-box-label">Estudio</div><div class="info-box-val" id="m-studio"></div></div>
         </div>
@@ -476,224 +477,203 @@
   </div>
 
   <script>
-    // Se añadieron fechas ISO reales en 'nextEpisode' para que el contador funcione,
-    // y se reemplazaron las URLs de Pinterest por Placeholders fiables.
+    // ── GENERADOR DINÁMICO DE FECHAS DE EMISIÓN ──
+    // Asegura que sin importar qué día abras la página, el contador siempre busque el próximo episodio
+    // 0: Domingo, 1: Lunes, 2: Martes, 3: Miércoles, 4: Jueves, 5: Viernes, 6: Sábado
+    function getNextAirDate(dayOfWeek, hour, minute = 0) {
+      const now = new Date();
+      let nextDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0);
+      const daysUntil = (dayOfWeek - now.getDay() + 7) % 7;
+      
+      // Si hoy es el día, pero la hora ya pasó, pasamos a la próxima semana
+      if (daysUntil === 0 && now.getTime() > nextDate.getTime()) {
+        nextDate.setDate(nextDate.getDate() + 7);
+      } else {
+        nextDate.setDate(nextDate.getDate() + daysUntil);
+      }
+      return nextDate.toISOString();
+    }
+
     const animes = [
       {
         id: 1,
-        title: "JoJo's Bizarre Adventure: Steel Ball Run",
-        jp: "ジョジョの奇妙な冒険 スティール・ボール・ラン",
-        genre: "Acción / Aventura Épica",
-        tags: ["accion", "top", "netflix"],
-        platform: "netflix",
-        rank: "S",
-        eps: "1 ep disponible (2nd Stage: otoño 2026)",
-        date: "19 mar 2026",
-        day: "Netflix Exclusivo",
-        studio: "David Production",
-        score: 5,
-        desc: "El arco más legendario de JoJo finalmente animado. Johnny Joestar, paralítico, compite en una épica carrera a caballo cruzando EE.UU. en 1890. El piloto dura 47 minutos y es una obra maestra visual. El episodio 2 llega en otoño 2026 con cour semanal. Nuevo universo, nuevo Joestar, misma energía bizarra.",
-        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=JoJo+SBR",
-        link: "https://www.netflix.com/search?q=steel+ball+run+jojo",
-        nextEpisode: "2026-04-12T00:00:00"
+        title: "Rent-a-Girlfriend Season 5",
+        jp: "彼女、お借りします 5期",
+        genre: "Romance / Comedia",
+        tags: ["romance", "crunchyroll"],
+        platform: "crunchyroll",
+        rank: "B",
+        eps: "Emisión semanal",
+        date: "Viernes",
+        day: "Crunchyroll",
+        studio: "TMS Entertainment",
+        score: 3,
+        desc: "Kazuya y Chizuru continúan su complicada relación. Después de los eventos de la cuarta temporada, los sentimientos son más evidentes pero los malentendidos continúan en esta quinta entrega de la popular comedia romántica.",
+        img: "https://image.pollinations.ai/prompt/anime%20poster%20Rent%20a%20Girlfriend%20Chizuru%20anime%20style?width=400&height=600&nologo=true",
+        link: "https://www.crunchyroll.com",
+        nextEpisode: getNextAirDate(5, 11, 30) // Viernes a las 11:30
       },
       {
         id: 2,
-        title: "Re:Zero — 4ª Temporada",
-        jp: "Re:ゼロから始める異世界生活 4th Season",
-        genre: "Isekai / Suspense / Drama",
-        tags: ["fantasy", "top", "crunchyroll"],
+        title: "Otaku ni Yasashii Gal wa Inai!?",
+        jp: "オタクに優しいギャルはいない！？",
+        genre: "Romance / Slice of Life / Escolar",
+        tags: ["romance", "crunchyroll"],
         platform: "crunchyroll",
-        rank: "S",
-        eps: "19 episodios confirmados",
-        date: "8 abr 2026",
-        day: "Miércoles · 22:00 JST",
-        studio: "White Fox",
-        score: 5,
-        desc: "Subaru enfrenta el arco de la Torre de las Pléyades en las dunas de Augria con Shaula como nueva antagonista. La T4 promete un giro narrativo emocional más cercano a Frieren que a la aventura tradicional. El ending es colaboración entre TK from Ling Toshite Shigure y MYTH & ROID. Solo 1 año después de la T3.",
-        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Re:Zero+T4",
-        link: "https://www.crunchyroll.com/series/GRGGPG93R/rezero-starting-life-in-another-world",
-        nextEpisode: "2026-04-15T13:00:00"
+        rank: "A",
+        eps: "Emisión semanal",
+        date: "Sábados",
+        day: "Crunchyroll",
+        studio: "Por confirmar",
+        score: 4,
+        desc: "¿De verdad no hay gals amables con los otakus? Seo, un otaku empedernido, descubre que las apariencias engañan cuando dos compañeras gyaru empiezan a interesarse genuinamente por sus aficiones.",
+        img: "https://image.pollinations.ai/prompt/anime%20poster%20Otaku%20friendly%20Gyaru%20school%20anime%20style?width=400&height=600&nologo=true",
+        link: "https://www.crunchyroll.com",
+        nextEpisode: getNextAirDate(6, 14, 0) // Sábado a las 14:00
       },
       {
         id: 3,
-        title: "Dorohedoro — 2ª Temporada",
-        jp: "ドロヘドロ Season 2",
-        genre: "Acción / Dark Fantasy / Gore",
-        tags: ["accion", "fantasy", "top", "crunchyroll"],
-        platform: "crunchyroll",
-        rank: "S",
-        eps: "~10 eps (finaliza 27 may 2026)",
-        date: "1 abr 2026",
-        day: "Miércoles · 7:00am PT",
-        studio: "MAPPA",
-        score: 5,
-        desc: "6 años de espera y MAPPA entrega. Caiman y Nikaido siguen desentrañando el secreto detrás de la transformación en una de las estéticas más brutales y únicas del anime. Premiere de 60 minutos (3 episodios). Disponible en Crunchyroll y Netflix (con dub inglés en Netflix).",
-        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Dorohedoro+S2",
-        link: "https://www.crunchyroll.com/series/G6NQ5DWZ6/dorohedoro",
-        nextEpisode: "2026-04-15T14:00:00"
-      },
-      {
-        id: 4,
-        title: "Classroom of the Elite — 4ª Temporada",
+        title: "Classroom of the Elite 4th Season",
         jp: "ようこそ実力至上主義の教室へ 4th Season",
-        genre: "Psicológico / Thriller Escolar",
+        genre: "Psicológico / Thriller / Escolar",
         tags: ["accion", "top", "crunchyroll"],
         platform: "crunchyroll",
         rank: "S",
-        eps: "~24 episodios (2do año)",
-        date: "1 abr 2026",
-        day: "Martes · Crunchyroll",
-        studio: "Studio Lerche",
+        eps: "Emisión semanal",
+        date: "Martes",
+        day: "Crunchyroll",
+        studio: "Lerche",
         score: 5,
-        desc: "Ayanokoji entra al 2do año con exámenes inter-generacionales y alianzas peligrosas. Rivales de la White Room quieren sacarlo del colegio. Premiere de 90 minutos con 4 episodios seguidos. El maestro de la manipulación social en su arco más arriesgado.",
-        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=CotE+S4",
-        link: "https://www.crunchyroll.com/series/G9VHN9QQQ/classroom-of-the-elite",
-        nextEpisode: "2026-04-14T10:30:00"
+        desc: "Ayanokoji entra en la siguiente fase de su estancia en la preparatoria. Con nuevos exámenes especiales y amenazas provenientes de la White Room, el genio manipulador deberá usar cada pieza del tablero para sobrevivir al segundo año.",
+        img: "https://image.pollinations.ai/prompt/anime%20poster%20Classroom%20of%20the%20Elite%20Ayanokoji%20dark%20anime%20style?width=400&height=600&nologo=true",
+        link: "https://www.crunchyroll.com",
+        nextEpisode: getNextAirDate(2, 10, 30) // Martes a las 10:30
+      },
+      {
+        id: 4,
+        title: "Marriagetoxin",
+        jp: "マリッジトキシン",
+        genre: "Acción / Comedia / Romance",
+        tags: ["accion", "romance", "netflix"],
+        platform: "netflix",
+        rank: "A",
+        eps: "Emisión semanal",
+        date: "Miércoles",
+        day: "Netflix",
+        studio: "CloverWorks",
+        score: 4,
+        desc: "Gero, el heredero de un clan de asesinos usuarios de veneno, necesita casarse para continuar su linaje. Para lograrlo, contrata a Kinosaki, un estafador matrimonial, para que le enseñe a tener citas mientras aniquila a sus objetivos.",
+        img: "https://image.pollinations.ai/prompt/anime%20poster%20Marriagetoxin%20assassin%20poison%20action%20anime?width=400&height=600&nologo=true",
+        link: "https://www.netflix.com",
+        nextEpisode: getNextAirDate(3, 9, 0) // Miércoles a las 09:00
       },
       {
         id: 5,
-        title: "Witch Hat Atelier",
-        jp: "とんがり帽子のアトリエ",
-        genre: "Fantasía / Arte / Magia",
-        tags: ["fantasy", "crunchyroll"],
+        title: "Class de 2-banme ni Kawaii Onnanoko to Tomodachi ni Natta",
+        jp: "クラスで2番目に可愛い女の子と友だちになった",
+        genre: "Romance / Escolar",
+        tags: ["romance", "crunchyroll"],
         platform: "crunchyroll",
-        rank: "A",
-        eps: "Por confirmar",
-        date: "6 abr 2026",
-        day: "Lunes · 23:00 JST",
-        studio: "BUG FILMS",
-        score: 5,
-        desc: "Coco sueña con ser bruja en un mundo donde la magia es secreto de pocas. Al espiar al mago Qifrey descubre la verdad prohibida. Manga de culto de Kamome Shirahama con arte visualmente impresionante. Double-episode premiere con dub en inglés disponible el mismo día.",
-        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Witch+Hat+Atelier",
+        rank: "B",
+        eps: "Emisión semanal",
+        date: "Jueves",
+        day: "Crunchyroll",
+        studio: "Por confirmar",
+        score: 4,
+        desc: "Maki hace una inesperada amistad con Umi, la chica considerada 'la segunda más linda de la clase'. Sin embargo, para él, ella es la número uno. Un romance escolar dulce y relajado sobre amistades que evolucionan a algo más.",
+        img: "https://image.pollinations.ai/prompt/anime%20poster%20second%20cutest%20girl%20in%20class%20romance%20anime?width=400&height=600&nologo=true",
         link: "https://www.crunchyroll.com",
-        nextEpisode: "2026-04-13T14:00:00"
+        nextEpisode: getNextAirDate(4, 12, 0) // Jueves a las 12:00
       },
       {
         id: 6,
-        title: "One Piece — Arco de Elbaph",
-        jp: "ONE PIECE — エルバフ編",
-        genre: "Shonen / Aventura / Piratas",
-        tags: ["accion", "crunchyroll"],
+        title: "Witch Hat Atelier",
+        jp: "とんがり帽子のアトリエ",
+        genre: "Fantasía / Magia / Arte",
+        tags: ["fantasy", "top", "crunchyroll"],
         platform: "crunchyroll",
-        rank: "A",
-        eps: "En curso (ep ~1150+)",
-        date: "5 abr 2026",
-        day: "Domingos · Crunchyroll",
-        studio: "Toei Animation",
-        score: 4,
-        desc: "La tripulación de Sombrero de Paja llega a Elbaph, la tierra de los gigantes. Uno de los arcos más esperados del manga de Eiichiro Oda. El hype está en máximos después del live-action de Netflix. Nuevo opening y ending revelados en Anime Japan 2026.",
-        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=One+Piece+Elbaph",
-        link: "https://www.crunchyroll.com/series/GRMG8ZQZR/one-piece",
-        nextEpisode: "2026-04-12T02:00:00"
+        rank: "S",
+        eps: "Emisión semanal",
+        date: "Lunes",
+        day: "Crunchyroll",
+        studio: "BUG FILMS",
+        score: 5,
+        desc: "Coco siempre soñó con usar magia, pero en su mundo, debes nacer siendo brujo. Tras descubrir por accidente el secreto de cómo se lanzan los hechizos, se convierte en la aprendiz del mago Qifrey en una historia visualmente deslumbrante.",
+        img: "https://image.pollinations.ai/prompt/anime%20poster%20Witch%20Hat%20Atelier%20magic%20fantasy%20beautiful?width=400&height=600&nologo=true",
+        link: "https://www.crunchyroll.com",
+        nextEpisode: getNextAirDate(1, 14, 0) // Lunes a las 14:00
       },
       {
         id: 7,
-        title: "Daemons of the Shadow Realm",
-        jp: "黄泉のツガイ",
-        genre: "Acción / Fantasía Oscura",
-        tags: ["accion", "fantasy", "crunchyroll"],
+        title: "Re:Zero 4th Season",
+        jp: "Re:ゼロから始める異世界生活 4th Season",
+        genre: "Isekai / Drama / Suspense",
+        tags: ["fantasy", "top", "crunchyroll"],
         platform: "crunchyroll",
-        rank: "A",
-        eps: "Por confirmar",
-        date: "Abril 2026",
-        day: "Por confirmar",
-        studio: "CloverWorks",
-        score: 4,
-        desc: "Nuevo manga de Hiromu Arakawa, creadora de Fullmetal Alchemist: Brotherhood. Yuru vive en una aldea feudal aislada hasta que helicópteros modernos la atacan. Fantasía oscura con contraste medieval-moderno que recuerda a Dororo y AoT. La apuesta más original de la temporada.",
-        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Daemons+Shadow+Realm",
+        rank: "S",
+        eps: "Emisión semanal",
+        date: "Miércoles",
+        day: "Crunchyroll",
+        studio: "White Fox",
+        score: 5,
+        desc: "Subaru y Emilia se adentran en un nuevo y oscuro misterio. La cuarta temporada adapta uno de los arcos más esperados de la novela ligera, llevando las habilidades y la resiliencia mental de Subaru a un límite sin precedentes.",
+        img: "https://image.pollinations.ai/prompt/anime%20poster%20Re%20Zero%20Subaru%20Emilia%20dark%20fantasy%20anime?width=400&height=600&nologo=true",
         link: "https://www.crunchyroll.com",
-        nextEpisode: "2026-04-20T18:00:00"
+        nextEpisode: getNextAirDate(3, 13, 0) // Miércoles a las 13:00
       },
       {
         id: 8,
-        title: "Dandelion",
-        jp: "ダンデライオン",
-        genre: "Comedia / Slice of Life",
-        tags: ["romance", "netflix"],
-        platform: "netflix",
-        rank: "B",
-        eps: "Por confirmar",
-        date: "16 abr 2026",
-        day: "Jueves · Netflix",
-        studio: "Por confirmar",
-        score: 4,
-        desc: "Adaptación del manga one-shot de Hideaki Sorachi, el creador de Gintama. Su debut en un género completamente diferente, lleno de humor absurdo y momentos inesperados. Una de las apuestas más curiosas de Netflix esta primavera para los fans que quieren algo distinto.",
-        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Dandelion",
-        link: "https://www.netflix.com/search?q=dandelion+anime+2026",
-        nextEpisode: "2026-04-16T00:00:00"
+        title: "One Piece",
+        jp: "ONE PIECE",
+        genre: "Shonen / Aventura / Piratas",
+        tags: ["accion", "top", "crunchyroll"],
+        platform: "crunchyroll",
+        rank: "S",
+        eps: "Emisión continua",
+        date: "Domingos",
+        day: "Crunchyroll",
+        studio: "Toei Animation",
+        score: 5,
+        desc: "La tripulación del Sombrero de Paja continúa su legendario viaje por el Nuevo Mundo. Con la calidad de animación en su punto máximo histórico, las aventuras de Luffy siguen rompiendo el internet cada fin de semana.",
+        img: "https://image.pollinations.ai/prompt/anime%20poster%20One%20Piece%20Luffy%20epic%20shonen%20anime?width=400&height=600&nologo=true",
+        link: "https://www.crunchyroll.com",
+        nextEpisode: getNextAirDate(0, 2, 0) // Domingos a las 02:00
       },
       {
         id: 9,
-        title: "Liar Game",
-        jp: "ライアーゲーム",
-        genre: "Psicológico / Thriller / Estrategia",
-        tags: ["accion", "crunchyroll"],
-        platform: "crunchyroll",
-        rank: "A",
-        eps: "Por confirmar",
-        date: "Abril 2026",
-        day: "Por confirmar",
-        studio: "Madhouse",
-        score: 4,
-        desc: "Madhouse adapta el clásico manga de Shinobu Kaitani. Nao Kanzaki entra al Liar Game, un torneo donde hay que arruinar financieramente a los rivales. Mente contra mente, mentira y psicología pura. El mismo estudio que produjo Death Note está detrás de esto.",
-        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Liar+Game",
-        link: "https://www.crunchyroll.com",
-        nextEpisode: "2026-04-18T20:00:00"
-      },
-      {
-        id: 10,
-        title: "Rompiendo el Hielo (Koori no Jouheki)",
-        jp: "氷の城壁",
-        genre: "Romance / Comedia / Escolar",
+        title: "Maid-san wa Taberu dake",
+        jp: "メイドさんは食べるだけ",
+        genre: "Slice of Life / Comida",
         tags: ["romance", "netflix"],
         platform: "netflix",
         rank: "B",
-        eps: "Por confirmar",
-        date: "2 abr 2026",
-        day: "Jueves · Netflix",
-        studio: "Studio KAI",
-        score: 4,
-        desc: "Koyuki prefiere pasar el instituto sola hasta que Minato decide derretir su muro de hielo. De la misma autora de 'Tú y yo somos polos opuestos', hit del invierno 2026. Romance más maduro de lo que aparenta, producido por Studio KAI que también hace Re:Zero.",
-        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Rompiendo+el+Hielo",
-        link: "https://www.netflix.com/search?q=ramparts+ice+anime",
-        nextEpisode: "2026-04-09T00:00:00"
-      },
-      {
-        id: 11,
-        title: "Slime — 4ª Temporada",
-        jp: "転生したらスライムだった件 4期",
-        genre: "Isekai / Fantasía / Construcción de reino",
-        tags: ["fantasy", "crunchyroll"],
-        platform: "crunchyroll",
-        rank: "B",
-        eps: "Por confirmar",
-        date: "3 abr 2026",
-        day: "Viernes · Crunchyroll",
-        studio: "8bit",
-        score: 4,
-        desc: "Rimuru y el reino de Tempest continuúan su expansión política y militar después del arco de la gran guerra. El isekai de construcción de reino mejor llevado del género regresa con más alianzas, negociaciones y batallas estratégicas. Ideal para ver relajado.",
-        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Slime+T4",
-        link: "https://www.crunchyroll.com/series/slime",
-        nextEpisode: "2026-04-10T15:30:00"
-      },
-      {
-        id: 12,
-        title: "Mao",
-        jp: "MAO",
-        genre: "Sobrenatural / Misterio / Histórico",
-        tags: ["fantasy", "crunchyroll"],
-        platform: "crunchyroll",
-        rank: "B",
-        eps: "Por confirmar",
-        date: "4 abr 2026",
-        day: "Sábado · Crunchyroll",
+        eps: "Emisión semanal",
+        date: "Viernes",
+        day: "Netflix",
         studio: "Por confirmar",
         score: 3,
-        desc: "Nueva obra de Rumiko Takahashi (Ranma ½, Inuyasha, InuYasha). Nanoka sobrevive a un accidente sobrenatural y años después descubre un portal al Japón de la era Taishō. Ahí conoce a Mao, un exorcista maldito. Juntos investigan crímenes con demonios y ayakashi entrelazando sus destinos.",
-        img: "https://placehold.co/400x600/1e2a4a/a78bfa?text=Mao",
-        link: "https://www.crunchyroll.com",
-        nextEpisode: "2026-04-11T12:00:00"
+        desc: "Una relajante historia de comedia sobre una maid británica que viaja a Japón y descubre las maravillas de la gastronomía japonesa, desde comida callejera hasta platillos tradicionales. Ideal para ver mientras comes.",
+        img: "https://image.pollinations.ai/prompt/anime%20poster%20maid%20eating%20japanese%20food%20cute%20anime?width=400&height=600&nologo=true",
+        link: "https://www.netflix.com",
+        nextEpisode: getNextAirDate(5, 8, 0) // Viernes a las 08:00
+      },
+      {
+        id: 10,
+        title: "Mata Korosarete Shimatta no desu ne, Tantei-sama",
+        jp: "また殺されてしまったのですね、探偵様",
+        genre: "Misterio / Sobrenatural",
+        tags: ["fantasy", "netflix"],
+        platform: "netflix",
+        rank: "A",
+        eps: "Emisión semanal",
+        date: "Sábados",
+        day: "Netflix",
+        studio: "Por confirmar",
+        score: 4,
+        desc: "Un excéntrico detective tiene un don especial: si es asesinado durante una investigación, retrocede en el tiempo con los recuerdos de su propia muerte para desenmascarar a su asesino. Misterios estilo 'whodunit' con viajes temporales.",
+        img: "https://image.pollinations.ai/prompt/anime%20poster%20detective%20murder%20mystery%20time%20loop%20anime?width=400&height=600&nologo=true",
+        link: "https://www.netflix.com",
+        nextEpisode: getNextAirDate(6, 10, 0) // Sábado a las 10:00
       }
     ];
 
@@ -709,10 +689,9 @@
       }
 
       grid.innerHTML = list.map(a => `
-        <div class="card" onclick="openModal(${a.id})" tabindex="0" role="button" aria-label="Ver detalles de ${a.title}">
+        <div class="card" onclick="openModal(${a.id})" tabindex="0" role="button">
           <div class="card-img-wrap">
-            <img class="card-img" src="${a.img}" alt="${a.title}"
-              onerror="this.src='https://placehold.co/400x600/111827/7c3aed?text=Error+Imagen'">
+            <img class="card-img" src="${a.img}" alt="${a.title}" loading="lazy">
             <span class="rank-badge rank-${a.rank.toLowerCase()}">${a.rank} Tier</span>
             <span class="platform-badge pl-${a.platform}">${a.platform === 'crunchyroll' ? 'CR' : 'NF'}</span>
             <div class="countdown-badge" data-target="${a.nextEpisode}">Calculando...</div>
@@ -744,6 +723,7 @@
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderGrid(tag);
+      updateCountdowns(); // Actualizar inmediatamente al filtrar
     }
 
     function openModal(id) {
@@ -754,14 +734,16 @@
       document.getElementById('m-title').textContent = a.title;
       document.getElementById('m-jp').textContent = a.jp;
       document.getElementById('m-date').textContent = a.date;
-      document.getElementById('m-day').textContent = a.day;
+      document.getElementById('m-day').textContent = a.platform === 'crunchyroll' ? 'Crunchyroll' : 'Netflix';
       document.getElementById('m-eps').textContent = a.eps;
       document.getElementById('m-studio').textContent = a.studio;
       document.getElementById('m-desc').textContent = a.desc;
+      
       const btn = document.getElementById('m-btn');
       btn.textContent = a.platform === 'crunchyroll' ? '▶ Ver en Crunchyroll' : '▶ Ver en Netflix';
       btn.className = 'watch-btn ' + (a.platform === 'crunchyroll' ? 'btn-cr' : 'btn-nf');
       btn.href = a.link;
+      
       document.getElementById('modal').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
@@ -790,11 +772,17 @@
 
         const distance = new Date(targetDate).getTime() - now;
 
-        if (distance < 0) {
-          badge.textContent = "¡Episodio Disponible!";
+        // Si el tiempo es menor a 0 (está saliendo justo ahora, dura 30 minutos)
+        if (distance < 0 && distance > -1800000) {
+          badge.textContent = "¡Ep. en emisión!";
           badge.style.color = "#f472b6";
           badge.style.borderColor = "#f472b6";
-        } else {
+        } 
+        // Si ya pasó, la función `getNextAirDate` calculará la de la próxima semana automáticamente al recargar
+        else {
+          badge.style.color = "#4ade80";
+          badge.style.borderColor = "var(--accent)";
+          
           const days = Math.floor(distance / (1000 * 60 * 60 * 24));
           const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
           const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -805,13 +793,10 @@
       });
     }
 
-    // Inicializar el grid primero
+    // Iniciar
     renderGrid('all');
-    
-    // Ejecutar el contador inmediatamente y luego cada 1000ms (1 segundo)
     updateCountdowns();
     setInterval(updateCountdowns, 1000);
-
   </script>
 </body>
 </html>
